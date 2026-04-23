@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Face Attendance System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            /* 🔥 Base background dark kar diya taaki glow dikhe */
+            background-color: #0f172a; 
+            height: 100vh; 
+            color: white; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden; 
+        }
+
+        /* 🔥 ASLI GLOWING ORBS */
+        .glowing-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px); /* Ise Glassmorphism blur bolte hain */
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .orb-1 {
+            top: -10%;
+            left: -10%;
+            width: 400px;
+            height: 400px;
+            background: #00d2ff;
+            opacity: 0.6;
+        }
+
+        .orb-2 {
+            bottom: -10%;
+            right: -10%;
+            width: 500px;
+            height: 500px;
+            background: #009688;
+            opacity: 0.5;
+        }
+
+        /* ================= LOGIN PANEL GLASSMORPHISM ================= */
+        .login-wrapper { position: relative; z-index: 1; text-align: center; width: 100%; max-width: 400px; }
+        .login-wrapper h2 { font-size: 28px; font-weight: 500; margin-bottom: 20px; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        
+        .glass-card { 
+            background: rgba(255, 255, 255, 0.05); /* Thoda aur transparent kiya */
+            backdrop-filter: blur(20px); 
+            -webkit-backdrop-filter: blur(20px); 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            border-radius: 20px; 
+            padding: 40px 30px; 
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5); 
+        }
+        
+        .glass-card .subtitle { font-size: 14px; margin-bottom: 30px; color: #b3b3b3; position: relative; display: inline-block; }
+        .glass-card .subtitle::after { content: ''; position: absolute; width: 100%; height: 1px; background: rgba(255,255,255,0.2); bottom: -5px; left: 0; }
+        
+        .input-group { position: relative; margin-bottom: 20px; text-align: left; }
+        .input-group label { display: block; font-size: 12px; margin-bottom: 5px; color: #d1d1d1; margin-left: 10px; }
+        .input-box { position: relative; }
+        .input-box i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #fff; font-size: 14px; }
+        
+        .glass-card input { 
+            width: 100%; 
+            padding: 12px 15px 12px 40px; 
+            background: rgba(255, 255, 255, 0.05); 
+            border: 1px solid rgba(255, 255, 255, 0.2); 
+            border-radius: 25px; 
+            color: white; 
+            font-size: 14px; 
+            outline: none; 
+            transition: 0.3s; 
+        }
+        
+        .glass-card input::placeholder { color: #888; }
+        .glass-card input:focus { background: rgba(255, 255, 255, 0.15); border-color: #00d2ff; }
+        
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover, 
+        input:-webkit-autofill:focus, 
+        input:-webkit-autofill:active{
+            -webkit-box-shadow: 0 0 0 30px #1e293b inset !important;
+            -webkit-text-fill-color: white !important;
+            transition: background-color 5000s ease-in-out 0s;
+        }
+
+        .btn-signin { width: 100%; background: #00d2ff; color: #000; padding: 12px; border: none; border-radius: 25px; font-size: 16px; cursor: pointer; margin-top: 15px; transition: 0.3s; font-weight: bold; }
+        .btn-signin:hover { background: #00a3cc; box-shadow: 0 4px 15px rgba(0, 210, 255, 0.4); }
+        .error { color: #ff6b81; margin-top: 15px; font-size: 14px; }
+
+        /* ================= DASHBOARD UI ================= */
+        #dashboard { display: none; width: 100%; max-width: 900px; background: rgba(30, 41, 59, 0.8); backdrop-filter: blur(15px); padding: 30px; border-radius: 15px; border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 10px 40px rgba(0,0,0,0.6); z-index: 1; margin: 20px; }
+        #dashboard h3 { color: #00d2ff; margin-bottom: 20px; text-align: center; }
+        .dash-controls { text-align: center; margin-bottom: 20px; }
+        .dash-controls button { background: #00d2ff; color: #000; padding: 12px 25px; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; font-weight: bold; margin: 10px; transition: 0.3s; }
+        .dash-controls button:hover { background: #00a3cc; }
+        .dash-controls .btn-danger { background: #ff4757; color: white; }
+        .dash-controls .btn-danger:hover { background: #ff6b81; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: rgba(255, 255, 255, 0.05); color: #fff; border-radius: 5px; overflow: hidden; }
+        th, td { padding: 12px 15px; border-bottom: 1px solid rgba(255,255,255,0.1); text-align: left; }
+        th { background-color: rgba(0, 210, 255, 0.2); color: #00d2ff; }
+        tr:hover { background-color: rgba(255, 255, 255, 0.1); }
+    </style>
+</head>
+<body>
+
+<div class="glowing-orb orb-1"></div>
+<div class="glowing-orb orb-2"></div>
+
+<div id="loginPanel" class="login-wrapper">
+    <h2>Welcome to Admin Login</h2>
+    <div class="glass-card">
+        <p class="subtitle">Sign in to start your session</p>
+        
+        <div class="input-group">
+            <label>Username</label>
+            <div class="input-box">
+                <i class="fas fa-envelope"></i>
+                <input type="text" id="username" placeholder="Username">
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label>Password</label>
+            <div class="input-box">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="password" placeholder="Password">
+            </div>
+        </div>
+
+        <button onclick="login()" class="btn-signin">Sign In</button>
+        <p id="errorMsg" class="error"></p>
+    </div>
+</div>
+
+<div id="dashboard">
+    <h3>Welcome to Attendance Dashboard</h3>
+    
+    <div class="dash-controls">
+        <button onclick="startCamera()"><i class="fas fa-camera"></i> Start Attendance Camera</button>
+        <button class="btn-danger" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+    </div>
+
+    <h4 style="text-align: center; margin-bottom: 10px; color: #e0e0e0;">Live Attendance Records</h4>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Course</th>
+                <th>Date</th>
+                <th>Time</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody">
+            </tbody>
+    </table>
+</div>
+
+<script>
+    let autoRefresh;
+
+    window.onload = function() {
+        if(localStorage.getItem("authToken")) {
+            document.getElementById("loginPanel").style.display = "none";
+            document.getElementById("dashboard").style.display = "block";
+            fetchData();
+            autoRefresh = setInterval(fetchData, 3000); 
+        }
+    };
+
+    async function login() {
+        const user = document.getElementById("username").value;
+        const pass = document.getElementById("password").value;
+        
+        const response = await fetch('/api/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username: user, password: pass })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            localStorage.setItem("authToken", data.token);
+            document.getElementById("loginPanel").style.display = "none";
+            document.getElementById("dashboard").style.display = "block";
+            document.getElementById("errorMsg").innerText = "";
+            fetchData();
+            autoRefresh = setInterval(fetchData, 3000); 
+        } else {
+            document.getElementById("errorMsg").innerText = "❌ " + data.message;
+        }
+    }
+
+    async function fetchData() {
+        const token = localStorage.getItem("authToken");
+        const response = await fetch('/get-attendance?t=' + new Date().getTime(), {
+            headers: { 'Authorization': `Bearer ${token}` } 
+        });
+
+        if (response.status === 403 || response.status === 401) {
+            logout();
+            alert("Session Expired. Please Login Again.");
+            return;
+        }
+
+        const records = await response.json();
+        let html = "";
+        records.forEach(row => {
+            html += `<tr><td>${row.Name}</td><td>${row.Course}</td><td>${row.Date}</td><td>${row.Time}</td></tr>`;
+        });
+        document.getElementById("tableBody").innerHTML = html;
+    }
+
+    function startCamera() {
+        fetch('/start-attendance');
+        const btn = document.querySelector(".dash-controls button");
+        btn.innerHTML = "<i class='fas fa-spinner fa-spin'></i> Camera is running...";
+        setTimeout(() => btn.innerHTML = "<i class='fas fa-camera'></i> Start Attendance Camera", 4000);
+    }
+
+    function logout() {
+        localStorage.removeItem("authToken"); 
+        clearInterval(autoRefresh); 
+        document.getElementById("loginPanel").style.display = "block";
+        document.getElementById("dashboard").style.display = "none";
+        document.getElementById("username").value = "";
+        document.getElementById("password").value = "";
+    }
+</script>
+
+</body>
+</html>
