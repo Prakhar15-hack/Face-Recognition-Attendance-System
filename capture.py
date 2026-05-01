@@ -5,7 +5,7 @@ import csv
 if not os.path.exists('images'):
     os.makedirs('images')
 
-cam = cv2.VideoCapture(0)
+cam = cv2.VideoCapture(1)
 face_detector = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 
 face_id = input('\n Enter Student ID ( e.g., 109): ')

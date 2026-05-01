@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secure Face Attendance System</title>
+    <title>Face Recognition Attendance System</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
         body { 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            /* 🔥 Base background dark kar diya taaki glow dikhe */
+            
             background-color: #0f172a; 
             height: 100vh; 
             color: white; 
@@ -21,11 +21,11 @@
             overflow: hidden; 
         }
 
-        /* 🔥 ASLI GLOWING ORBS */
+
         .glowing-orb {
             position: absolute;
             border-radius: 50%;
-            filter: blur(80px); /* Ise Glassmorphism blur bolte hain */
+            filter: blur(80px); 
             z-index: 0;
             pointer-events: none;
         }
@@ -48,12 +48,12 @@
             opacity: 0.5;
         }
 
-        /* ================= LOGIN PANEL GLASSMORPHISM ================= */
+      
         .login-wrapper { position: relative; z-index: 1; text-align: center; width: 100%; max-width: 400px; }
         .login-wrapper h2 { font-size: 28px; font-weight: 500; margin-bottom: 20px; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
         
         .glass-card { 
-            background: rgba(255, 255, 255, 0.05); /* Thoda aur transparent kiya */
+            background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(20px); 
             -webkit-backdrop-filter: blur(20px); 
             border: 1px solid rgba(255, 255, 255, 0.1); 
@@ -98,7 +98,7 @@
         .btn-signin:hover { background: #00a3cc; box-shadow: 0 4px 15px rgba(0, 210, 255, 0.4); }
         .error { color: #ff6b81; margin-top: 15px; font-size: 14px; }
 
-        /* ================= DASHBOARD UI ================= */
+       
         #dashboard { display: none; width: 100%; max-width: 900px; background: rgba(30, 41, 59, 0.8); backdrop-filter: blur(15px); padding: 30px; border-radius: 15px; border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 10px 40px rgba(0,0,0,0.6); z-index: 1; margin: 20px; }
         #dashboard h3 { color: #00d2ff; margin-bottom: 20px; text-align: center; }
         .dash-controls { text-align: center; margin-bottom: 20px; }
@@ -198,7 +198,7 @@
             fetchData();
             autoRefresh = setInterval(fetchData, 3000); 
         } else {
-            document.getElementById("errorMsg").innerText = "❌ " + data.message;
+            document.getElementById("errorMsg").innerText = " " + data.message;
         }
     }
 

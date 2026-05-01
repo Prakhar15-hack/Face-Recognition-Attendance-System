@@ -69,7 +69,7 @@ while True:
                         year = user_data.iloc[0]['Year']
                         
                       
-                        course = f"{course_name} - {year}" 
+                        course = f"{course_name} - {year} Year" 
                         details = course
                     else:
                         details = "Data not in CSV"
